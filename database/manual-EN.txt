@@ -1,0 +1,58 @@
+{sticker rightArrow 0 0.5}{sticker leftArrow 55 0.5}{bold}{center}You received a mysterious letter.
+Grab the Portal Stone and set off!{endbold}
+{left}
+{symbol ruler} {bold}Welcome to [gameName]!{endbold}
+{bold}[gameName]{endbold} is a minimalist solo narrative tabletop RPG. It uses tables to generate Places, Encounters, and Events, found in randomly generated {bold}[regionBooklets]{endbold}. This way, you may explore different regions with unique locations, strange encounters, and hidden mysteries in your mind.
+To play, you need this Game Manual Booklet (with a character sheet on the back), a [regionBooklet] of your choice, and a Map sheet - you should have printed them from {italic}[gameShortUrl]{enditalic}. You will also need 3 dark and 3 light dice, a pencil, an eraser, and a small token (the Character Token). I also suggest you keep a journal of your adventures. Ready? Let's {bold}Start a New Game{endbold}!
+
+{symbol ruler} {bold}Starting a New Game{endbold}
+{bold}1.{endbold} Pick a [regionBooklet] and a character sheet with a matching birthplace, or {bold}create a new one{endbold} (see below).
+{bold}2.{endbold} Pick an empty Map, fill in the Hero, World, and Region names, and tick the Region symbol. Fill the Letter using the [regionBooklet]: roll 1d3+1d6 on the Places table and 2d6 on the Encounter Type table.
+{bold}3.{endbold} Place your Character Token on the Portal Zone. It's a Zone with no Encounters and contains the portal only.
+{bold}4.{endbold} Choose a Zone and follow the {bold}Game Flow{endbold}.
+
+{symbol ruler} {bold}Creating a New Character{endbold}
+{bold}1.{endbold} Pick any [regionBooklet]: its World name is your character's birthplace.
+{bold}2.{endbold} Pick an empty character sheet. On the right side, from top to bottom, draw your character portrait, write your character name and birthplace, and set 6 Health and 6 Gold.
+{bold}3.{endbold} You may narrate your character's backstory and how it got a Portal Stone. To determine a profession, roll 1d3 and 1d6 on the [regionBooklet] Creature Type table.
+
+{symbol ruler} {bold}Game Flow{endbold}
+{bold}1.{endbold} If entering an empty Zone, roll on the Places table, and record the rolled value in the Zone's circle. Some Places span multiple adjacent Zones to form a group.
+{bold}2.{endbold} If the Zone has no recorded Encounter, roll on the Encounter Type and Creature Type tables, then Record results (or just the numbers) in the Zone hexagon's two empty spaces. 
+{bold}2A.{endbold} If the Encounter Type and the Place match the Letter, narrate the encounter with the mysterious sender! Why does it need you?
+{bold}3.{endbold} Move your Character Token to that Zone. Get inspired by the recorded Zone Encounter and:
+{bold}3A.{endbold} If the Zone is marked as Solved, you may narrate the Encounter aftermath.
+{bold}3B.{endbold} If the Zone is not marked as Solved, you may narrate the Encounter and, if you think it requires your character intervention, select a fitting Stat between {symbol battleSymbol} Battle, {symbol agilitySymbol} Agility, {symbol fixSymbol} Fixing, or {symbol socialSymbol} Social, and {bold}perform a Test{endbold} to earn any {bold}success{endbold} and {bold}solve it{endbold}.
+{bold}4.{endbold} Roll a die. On 4+, roll on the Events table to see what happens next.
+{bold}5.{endbold} If the Event doesn't move you, choose an adjacent destination Zone: you will leave your current Zone to enter that Zone.
+{bold}6.{endbold} Repeat from step 1.
+
+{symbol ruler} {bold}Performing a Test on a Stat{endbold}
+{bold}1.{endbold} Decide the test target value and range. Creatures have their suggested targets on the Creature Type table: for {symbol battleSymbol} tests, they have a bolded value between 1 or 2 range numbers and a {symbol woundSymbol} wounds value, for {symbol socialSymbol} tests they have value and range only. If no target is specified, use value {bold}21{endbold} and no range.
+{bold}2.{endbold} {bold}Act{endbold}: Roll 1 dark and 1 light die. You may add up to 4 dice (3 if {bold}disadvantaged{endbold}): if the sum is less than 17 add dice pairs, otherwise add single die alternating colors (you decide the first one).
+{bold}3.{endbold} {bold}Push{endbold}: You may pay 1 Gold or lose 1 Health to reroll 1 die or +1/-1 any rolled die. 6s can only be decreased and 1s only increased. If {bold}advantaged{endbold}, you may repeat this step twice.
+{bold}4.{endbold} {bold}Unleash{endbold}: You may adjust 1 die value if it matches a ticked column in the character sheet tested Stat section by the tick count on that dice row. Dark dice values can only be increased and light dice values can only be decreased. If {bold}advantaged{endbold}, you may repeat this step twice.
+{bold}5.{endbold} If the dice total value hits the target value, it is a {bold}great success{endbold}. If it falls within the target range it's a {bold}success{endbold}. Otherwise, it's a {bold}failure{endbold}.
+{bold}6.{endbold} On Zone Encounter Tests (i.e. {bold}Game Flow{endbold} 3B step): {bold}Gain a prize{endbold} on {bold}great success{endbold}, {bold}Pay a price{endbold} on {bold}failure{endbold}.
+{bold}6A.{endbold} Gain a prize: the suggested prize for {symbol battleSymbol} and {symbol agilitySymbol} tests is 1 Gold and for {symbol fixSymbol} and {symbol socialSymbol} is 1 Health. You can never have more than 6 Health and 10 Gold.
+{bold}6B.{endbold} Pay the price: the suggested price for {symbol battleSymbol} and {symbol agilitySymbol} tests is 1 Health and for {symbol fixSymbol} and {symbol socialSymbol} is 1 Gold. If you have no Gold, you may pay 1 Health instead. Creatures have their {symbol battleSymbol} tests suggested price as {symbol woundSymbol}.
+
+{symbol ruler} {bold}Solving a Zone{endbold}
+{bold}1.{endbold} If the Zone's inner hexagon border is outlined, it has been already solved or can't be solved. The solving ends.
+{bold}2.{endbold} Outline the border now. Tick the next squared cell from the XP sections, from left to right and from top to bottom if any.
+{bold}3.{endbold} If solving the Zone due to an Encounter Test (i.e. {bold}Game Flow{endbold} 3B step):
+{bold}3A.{endbold} If your character sheet tested Stat section name is blank and it doesn't appear in any other space, write the Encounter's Creature Type. You just met a {bold}key character{endbold} of your story and you'll meet it again on every Encounter with the same Creature Type.
+{bold}3B.{endbold} Otherwise, if the Encounter's Creature Type matches your character sheet tested Stat section name, tick that section's next empty squared cell from top to bottom if any. If you just ticked the last squared cell, you may narrate the farewell.
+{bold}4.{endbold} If you just ticked any cell with a dot, tick as many round cells on your character sheet.
+
+{symbol ruler} {bold}Extra Rules{endbold}
+{bold}Symbols/keywords.{endbold} 1 {symbol healSymbol}: gain 1 Health. 1 {symbol woundSymbol}: lose 1 Health. {bold}End{endbold}: the Event ends immediately.
+{bold}Dying.{endbold} At 0 Health, perform a {symbol fixSymbol} test: set Health to 6 and place your Character Token on the Portal Zone on success. Otherwise, narrate your character's end.
+{bold}Teleport to another Region.{endbold} Instead of choosing a new Zone to explore ({bold}Game Flow{endbold} step 5), you can {bold}Start a New Game{endbold} with the same character on another [regionBooklet].
+{bold}Once in this Zone.{endbold} If the Zone's circle is outlined, the action can't be performed. Otherwise, outline it and proceed.
+
+{symbol ruler} {bold}Game Modes{endbold}
+{bold}2 Players.{endbold} Explore the same [regionBooklet] with a friend! Both players use one Map and move like a group, one player rolls the Places, Encounters, and Events and narrates the world, and the other one narrates its character reactions and performs the tests. Roles switch every Game Flow cycle.
+{bold}The Crawler.{endbold} Play the same [regionBooklet] multiple times: each run creates a new adventure in a familiar setting.
+{bold}The Traveler.{endbold} Worlds have 9 regions. During exploration, you may find some codes: go to the game website, tell The Creator you're a Traveler, and input the booklet data and the code to download another [regionBooklet] to explore. Reconnect with old characters, face new challenges, and uncover the World lore...
+{bold}The Seeker.{endbold} ??? / {bold}The Enlightened.{endbold} ???

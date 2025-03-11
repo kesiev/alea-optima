@@ -1,0 +1,92 @@
+<html><head>
+	<meta charset="UTF-8">
+	<meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<title>Alea Optima</title>
+	<meta property="og:image" content="https://www.kesiev.com/alea-optima/images/og-image.png">
+    <meta property="og:description" content="A minimalist and portable solo tabletop RPG in which you explore procedurally generated Worlds in your mind.">
+
+	<link rel="stylesheet" href="style/home.css">
+	<link rel="stylesheet" type="text/css" href="style/Seshat/stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="style/utmtimes/stylesheet.css">
+	<link rel="stylesheet" type="text/css" href="style/LswDrachenklaueRegular/stylesheet.css">
+	
+	<script src="js/svg.js"></script>
+	<script src="js/jspdf.umd.min.js"></script>
+	<script src="js/svg2pdf.umd.min.js"></script>
+	<script src="js/fonts/Seshat-normal.js"></script>
+	<script src="js/fonts/Utmtimesbold-normal.js"></script>
+	<script src="js/fonts/Utmtimesitalic-normal.js"></script>
+	<script src="js/fonts/LswDrachenklaueRegular-normal.js"></script>
+	<script src="js/metadata.js"></script>
+	<script src="js/bookletprinter.js"></script>
+	<script src="js/database.js"></script>
+	<script src="js/worldgenerator.js"></script>
+	<script src="js/namegenerator.js"></script>
+	<script src="js/regiongenerator.js"></script>
+	<script src="js/ascensiongenerator.js"></script>
+	<script src="js/manualgenerator.js"></script>
+	<script src="js/translator.js"></script>
+	<script src="js/random.js"></script>
+	<script src="js/worldmap.js"></script>
+
+	<script src="js/game.js"></script>
+	<script src="js/interface.js"></script>
+
+</head><body onload="runInterface()">
+	<div style="position:absolute;left:-100vw">
+		<div style="font-family:seshat">Font loaded</div>
+		<div style="font-family:times">Font loaded</div>
+		<div style="font-family:times;font-weight:bold">Font loaded</div>
+		<div style="font-family:times;font-style:italic">Font loaded</div>
+		<div style="font-family:Utmtimesbold">Font loaded</div>
+		<div style="font-family:Utmtimesitalic">Font loaded</div>
+		<div style="font-family:LswDrachenklaueRegular">Font loaded</div>
+	</div>
+	<div id="logo" class="logo hidden">
+		<div class="logopart background"></div>
+		<div class="logopart foreground"></div>
+	</div>
+	<div id="pencil" class="hidden"></div>
+	<div id="eraser" class="hidden"></div>
+	<div id="leftpanel" class="left panel">
+		<div class="text"><div class="content">
+			<div class="title" id="leftpaneltitle"></div>
+			<div class="description" id="leftpaneldescription"></div>
+		</div></div>
+	</div>
+	<div id="rightpanel" class="right panel">
+		<div class="text"><div class="content">
+			<div class="title" id="rightpaneltitle"></div>
+			<div class="description" id="rightpaneldescription"></div>
+		</div></div>
+	</div>
+	<div id="inputboard" class="board">
+		<div class="text"><div class="content">
+			<div class="label" id="inputboardtitle"></div>
+			<div class="input"><input id="inputboardinput" type="text" maxlength="9"></div>
+			<div class="separator"></div>
+			<div id="inputboardyesbutton" class="button forward"><div class="s1"></div><div class="s2"></div><div id="inputboardyes" class="s3"></div></div>
+			<div id="inputboardnobutton" class="button back"><div class="s1"></div><div class="s2"></div><div id="inputboardno" class="s3"></div></div>
+		</div></div>
+	</div>
+	<div id="talkbox" class="talkbox leave">
+		<div class="spinner"></div>
+		<div id="notesbox"></div>
+		<div class="bar"></div>
+		<div class="text"><div id="talkboxcontent" class="content"></div></div>
+	</div>
+	<div id="yesnoboard" class="yesno board">
+		<div class="text"><div class="content">
+			<div id="yesbutton" class="button forward"><div class="s1"></div><div class="s2"></div><div class="s3" id="yesnoyes"></div></div>
+			<div id="nobutton" class="button back"><div class="s1"></div><div class="s2"></div><div class="s3" id="yesnono"></div></div>
+		</div></div>
+	</div>
+	<div id="startboard" class="start board">
+		<div class="text"><div class="content">
+			<div id="startbutton" class="button start"><div class="s1"></div><div class="s2"></div><div class="s3" id="startboardbutton"></div></div>
+		</div></div>
+	</div>
+	<div id="footer"></div>
+</body></html>

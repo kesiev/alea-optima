@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Utmtimesitalic';
+    src: url('utmtimesitalic-webfont.woff2') format('woff2'),
+         url('utmtimesitalic-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}
+
+@font-face {
+    font-family: 'Utmtimesbold';
+    src: url('utmtimesbold-webfont.woff2') format('woff2'),
+         url('utmtimesbold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+
+}

@@ -1,0 +1,367 @@
+<html>
+    <head>
+        <meta name="viewport" id="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <script src="../../js/svg.js"></script>
+        <script src="../../js/jspdf.umd.min.js"></script>
+        <script src="../../js/svg2pdf.umd.min.js"></script>
+        <script src="../../js/fonts/Seshat-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesbold-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesitalic-normal.js"></script>
+        <script src="../../js/fonts/LswDrachenklaueRegular-normal.js"></script>
+        <script src="../../js/metadata.js"></script>
+        <script src="../../js/bookletprinter.js"></script>
+        <script src="../../js/database.js"></script>
+        <script src="../../js/worldgenerator.js"></script>
+        <script src="../../js/namegenerator.js"></script>
+        <script src="../../js/regiongenerator.js"></script>
+        <script src="../../js/ascensiongenerator.js"></script>
+        <script src="../../js/manualgenerator.js"></script>
+        <script src="../../js/translator.js"></script>
+        <script src="../../js/random.js"></script>
+        <script src="../../js/worldmap.js"></script>
+        <script src="../../js/game.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style/Seshat/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/utmtimes/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/LswDrachenklaueRegular/stylesheet.css">
+        <style>
+            .roller {
+                padding:15px;
+                background-color: #ccc;
+                border:2px solid #000;
+                border-radius:5px;
+            }
+
+            .roller INPUT {
+                padding:10px 5px;
+            }
+
+            .roller .special {
+                background-color: #f00;
+                color:#fff;
+            }
+
+            .roll {
+                background-color: #000;
+                color: #fff;
+                padding:10px 20px;
+                border-radius: 100px;
+                border:1px solid #f00;
+            }
+
+            .rollout {
+                line-height: 30px;
+                background-color: #fff;
+                padding:10px;
+            }
+
+            .rollout, .rollout INPUT {
+                font-size: 15px;
+            }
+
+        </style>
+    </head>
+</html>
+<body onload="onl()">
+    <div style="font-family:seshat">Font loaded</div>
+    <div style="font-family:times">Font loaded</div>
+	<div style="font-family:times;font-weight:bold">Font loaded</div>
+	<div style="font-family:times;font-style:italic">Font loaded</div>
+    <div style="font-family:Utmtimesbold">Font loaded</div>
+	<div style="font-family:Utmtimesitalic">Font loaded</div>
+    <div style="font-family:LswDrachenklaueRegular">Font loaded</div>
+</body>
+<div id="ui" style="display:none">
+    <input type="button" onclick="showBooklets()" value="Booklets"> |
+    <input type="button" onclick="showText()" value="Text"> |
+    <input type="button" onclick="showCharacterSheets()" value="Character sheets">
+</div>
+<hr>
+<div id="out"></div>
+<script>
+
+let
+    out,
+    seed,
+    database;
+
+function getFileName(id,extension) {
+    let
+        filename = "";
+
+    if (out.booklets[id].isManual)
+        return "manual."+extension;
+    else if (out.booklets[id].isMap)
+        return "map."+extension;
+    else
+        return "booklet-"+seed+"-"+id+"."+extension;
+}
+
+function downloadPdf(id) {
+    out.booklets[id].svg.downloadPDF(getFileName(id,"pdf"));
+}
+
+function downloadSvg(id) {
+    out.booklets[id].svg.downloadSVG(getFileName(id,"svg"));
+}
+
+function showCharacterSheets() {
+    game.downloadCharacterSheets("EN");
+}
+
+function showBooklets() {
+    let
+        allHtml = "";
+
+    out.booklets.forEach((booklet,id)=>{
+        allHtml += "<h1>Booklet "+id+"</h1><div>"+booklet.svg.getSVG()+"</div>";
+        allHtml += "<div><input type='button' onclick='downloadPdf("+id+")' value='PDF'> <input type='button' onclick='downloadSvg("+id+")' value='SVG'></div>";
+    })
+
+    document.getElementById("out").innerHTML = allHtml;
+}
+
+function markupToHTML(text) {
+    return text
+        .replace(/\{center\}/g,"<center>")
+        .replace(/\{left\}/g,"</center>")
+        .replace(/\{bold\}/g,"<b>")
+        .replace(/\{endbold\}/g,"</b>")
+        .replace(/\{italic\}/g,"<i>")
+        .replace(/\{enditalic\}/g,"</i>")
+        .replace(/\{tab\}/g,"<br>")
+        .replace(/\{nowordwrap\}/g,"")
+        .replace(/\{wordwrap\}/g,"")
+        .replace(/\{nomultipage\}/g,"")
+        .replace(/\{moveup [^}]+\}/g,"")
+        .replace(/\{moveback [^}]+\}/g,"")
+        .replace(/\{fantasy\}/g,"<span style='font-family:LswDrachenklaueRegular'>")
+        .replace(/\{endfantasy\}/g,"</span>")
+        .replace(/\n/g,"<br>")
+        .replace(/\{sticker ([^}]+)\}/g,"")
+        .replace(/\{symbol ([^}]+)\}/g,(m,m1)=>{
+            if (m1.endsWith("Symbol"))
+                return "<span style='padding:2px;background-color:red;color:white;border-radius:2px'>"+m1.substr(0,m1.length-6)+"</span>";
+            if (m1.startsWith("emoji"))
+                return "<span style='padding:2px;background-color:green;color:white;border-radius:2px'>"+m1.substr(5)+"</span>";
+            else
+                switch (m1) {
+                    case "largeLogo":{
+                        return "<h2>Alea Optima</h2>";
+                    }
+                    case "ruler":{
+                        return "<div style='display:inline-block;height:2px;width:50px;background-color:#000;vertical-align:middle'></div>";
+                    }
+                    case "separator":{
+                        return "<div style='height:2px;width:100px;background-color:#000;vertical-align:middle;margin:10px auto'></div>";
+                    }
+                    case "characterSheet":{
+                        return "<div><i>(Character sheet)</i></div>";
+                    }
+                    case "manualCover":{
+                        return "<div><i>(Manual cover)</i></div>";
+                    }
+                    default:{
+                        return "???:"+m1;
+                    }
+                }
+        }).trim();
+}
+
+function rollDie() {
+    return Math.floor(Math.random()*6)+1;
+}
+
+function isEmpty(id) {
+    return document.getElementById('out'+id).innerHTML == "";
+}
+
+function okButton(id) {
+    return " <input type='button' value='OK' onclick=\"document.getElementById('out"+id+"').innerHTML=''\">";
+}
+
+function rollPlace(id) {
+    if (isEmpty(id)) {
+        let
+            rollA1 = rollDie(),
+            rollA2 = rollDie(),
+            result = database[id].places[rollA1+rollA2-2];
+        document.getElementById('out'+id).innerHTML = "<b>Place:</b> <span class='roll'>"+(rollA1+rollA2)+"</span> "+result+okButton(id);
+    }
+}
+
+function rollEncounter(id) {
+    if (isEmpty(id)) {
+        let
+            rollA1 = rollDie(),
+            rollA2 = rollDie(),
+            rollB1 = rollDie(),
+            rollB2 = rollDie(),
+            result1 = database[id].encounterType[((rollA1-1)*6)+(rollA2-1)],
+            result2 = database[id].creatureType[((rollB1-1)*6)+(rollB2-1)];
+        document.getElementById('out'+id).innerHTML = "<b>Encounter:</b> <span class='roll'>"+rollA1+rollA2+"</span> <b>"+result1+"</b> encounter with <span class='roll'>"+rollB1+rollB2+"</span> <b>"+result2+"</b> ("+database[id].headers.creatureType[rollB1-1]+")"+okButton(id);
+    }
+}
+
+function rollEvent(check,id) {
+    if (isEmpty(id)) {
+        let
+            run = true;
+
+        if (check)
+            run = rollDie()>=4;
+        
+        if (run) {
+
+            let
+                rollA1 = rollDie(),
+                rollA2 = rollDie(),
+                result = database[id].events[((rollA1-1)*6)+(rollA2-1)];
+            document.getElementById('out'+id).innerHTML = "<b>Event:</b> <span class='roll'>"+rollA1+rollA2+"</span> - "+result+okButton(id);
+
+        } else {
+            document.getElementById('out'+id).innerHTML = "<b>Event:</b> <i>Nothing happens...</i>"+okButton(id);
+        }
+    }
+}
+
+function showText() {
+    let
+        allHtml = "";
+
+    database = {};
+
+    out.booklets.forEach((booklet,id)=>{
+        let
+            bookletHtml = "";
+
+        database[id]={
+            places:[],
+            encounterType:[],
+            creatureType:[],
+            events:[],
+            headers:{
+                creatureType:[]
+            }
+        };
+        if (booklet.data) {
+            booklet.data.forEach((text,blockid)=>{
+                if (blockid == 0) {
+                    text.replace(/\{bold\}World:{endbold}(.*) \{bold\}Region:\{endbold}(.*)/,(m,m1,m2)=>{
+                        
+                        database[id].worldName = markupToHTML(m1);
+                        database[id].regionName = markupToHTML(m2);
+                    })
+                    .replace(/\{bold\}World:{endbold}(.*) \{bold\}(.*)\{endbold\}/,(m,m1,m2)=>{
+                        
+                        database[id].worldName = markupToHTML(m1);
+                        database[id].regionName = markupToHTML(m2);
+                    });
+                }
+                text.replace(/\{symbol ruler\} \{bold\}([^}]+){endbold}([^\n]+)/g,(m,m1,m2)=>{
+                    let
+                        pcs = m1.split("-"),
+                        start = parseInt(pcs[0]),
+                        end = pcs[1] ? parseInt(pcs[1]) : start,
+                        html = markupToHTML(m2);
+                    for (let i=start;i<=end;i++)
+                        switch (blockid) {
+                            case 0:{
+                                // Places
+                                database[id].headers.places.push(html);
+                                break;
+                            }
+                            case 1:{
+                                // Encounter Type
+                                database[id].headers.encounterType.push(html);
+                                break;
+                            }
+                            case 2:{
+                                // Creature Type
+                                database[id].headers.creatureType.push(html);
+                                break;
+                            }
+                            case 3:{
+                                // Events
+                                database[id].headers.events.push(html);
+                                break;
+                            }
+                        }
+                });
+                text.replace(/\{tab\}/g,"\n").split("\n").forEach(line=>{
+                    line.replace(/^\{bold\}([^}]+){endbold}(.*)/,(m,m1,m2)=>{
+                        let
+                            pcs = m1.split("-"),
+                            start = parseInt(pcs[0]),
+                            end = pcs[1] ? parseInt(pcs[1]) : start,
+                            html = markupToHTML(m2);
+                        for (let i=start;i<=end;i++)
+                            switch (blockid) {
+                                case 0:{
+                                    // Places
+                                    database[id].places.push(html);
+                                    break;
+                                }
+                                case 1:{
+                                    // Encounter Type
+                                    database[id].encounterType.push(html);
+                                    break;
+                                }
+                                case 2:{
+                                    // Creature Type
+                                    database[id].creatureType.push(html);
+                                    break;
+                                }
+                                case 3:{
+                                    // Events
+                                    database[id].events.push(html);
+                                    break;
+                                }
+                            }
+                    })
+                })
+
+                text = markupToHTML(text);
+                bookletHtml += "<div>"+text+"</div><hr>";
+            })
+           
+        }
+
+        allHtml += "<h1>Booklet "+id+"</h1>";
+        if (database[id].worldName)
+            allHtml += "<div class='roller'><h1>"+database[id].regionName+"</h1><h3>World: "+database[id].worldName+"</h3><input type='button' value='Place' onclick='rollPlace("+id+")'> | <input type='button' value='Encounter' onclick='rollEncounter("+id+")'> | <input type='button' value='Test event' onclick='rollEvent(true,"+id+")'> | <input class='special' type='button' value='Event' onclick='rollEvent(false,"+id+")'><br><br><div class='rollout' id='out"+id+"'></div></div>";
+        allHtml += bookletHtml;
+        
+    })
+
+    document.getElementById("out").innerHTML = allHtml;
+    console.log(database);
+}
+
+function onl() {
+
+    game = new Game("../../");
+
+    game.load(_=>{
+        let
+            SEEDLETTERS="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+        seed = "";
+
+        if (window.location.hash)
+            seed = window.location.hash;
+        else {
+            for (let i=0;i<10;i++)
+                seed+=SEEDLETTERS[Math.floor(Math.random()*SEEDLETTERS.length)];
+        }
+
+        out = game.benchmark(true, true, "EN", 0, seed),
+          
+        console.log(out.booklets);
+
+        document.getElementById("ui").style.display="block";
+        showText();
+
+    })
+
+}
+</script>

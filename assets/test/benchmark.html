@@ -1,0 +1,161 @@
+<html>
+    <head>
+        <script src="../../js/svg.js"></script>
+        <script src="../../js/jspdf.umd.min.js"></script>
+        <script src="../../js/svg2pdf.umd.min.js"></script>
+        <script src="../../js/fonts/Seshat-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesbold-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesitalic-normal.js"></script>
+        <script src="../../js/fonts/LswDrachenklaueRegular-normal.js"></script>
+        <script src="../../js/metadata.js"></script>
+        <script src="../../js/bookletprinter.js"></script>
+        <script src="../../js/database.js"></script>
+        <script src="../../js/worldgenerator.js"></script>
+        <script src="../../js/namegenerator.js"></script>
+        <script src="../../js/regiongenerator.js"></script>
+        <script src="../../js/ascensiongenerator.js"></script>
+        <script src="../../js/manualgenerator.js"></script>
+        <script src="../../js/translator.js"></script>
+        <script src="../../js/random.js"></script>
+        <script src="../../js/worldmap.js"></script>
+        <script src="../../js/game.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style/Seshat/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/utmtimes/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/LswDrachenklaueRegular/stylesheet.css">
+    </head>
+</html>
+<body>
+    <div style="font-family:seshat">Font loaded</div>
+    <div style="font-family:times">Font loaded</div>
+	<div style="font-family:times;font-weight:bold">Font loaded</div>
+	<div style="font-family:times;font-style:italic">Font loaded</div>
+    <div style="font-family:Utmtimesbold">Font loaded</div>
+	<div style="font-family:Utmtimesitalic">Font loaded</div>
+    <div style="font-family:LswDrachenklaueRegular">Font loaded</div>
+</body>
+<div id="log"><input type="button" value="Start" onclick="run()"></div>
+<script>
+
+const
+    SEEDLETTERS="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+    SEEDS = 200,
+    BOOKLETVALUES = [
+        { fromPage:0, toPage:2 },
+        { fromPage:2, toPage:3 },
+        { fromPage:3, toPage:4 },
+        { fromPage:4, toPage:8 }
+    ];
+
+let
+    game,
+    iteration = 0,
+    segmentStats = [ ],
+    statValues = {};
+
+
+function runTest() {
+    if (iteration < SEEDS) {
+
+        let
+            seed = "",
+            out, line;
+
+        for (let i=0;i<10;i++)
+            seed+=SEEDLETTERS[Math.floor(Math.random()*SEEDLETTERS.length)];
+
+        out = game.benchmark(false, false, "EN", 0, seed),
+        line = "Testing seed "+iteration+" of "+SEEDS+": "+seed;
+
+        console.log(line);
+        document.getElementById("log").innerHTML = line;
+
+        for (let k in out.stats) {
+            let
+                value = out.stats[k];
+            if (!statValues[k]) statValues[k] = { sum:0 };
+            statValues[k].sum+=value;
+            statValues[k].avg = statValues[k].sum/(iteration+1);
+            if ((statValues[k].min === undefined) || (value<statValues[k].min))
+                statValues[k].min = value;
+            if ((statValues[k].max === undefined) || (value>statValues[k].max))
+                statValues[k].max = value;
+        }
+        
+        out.booklets.forEach((booklet,bookletId)=>{
+            booklet.stats.forEach((segment,segmentId)=>{
+                if (segment.failed)
+                    console.error("Seed",seed,"bookletId",bookletId,"segment",segmentId,"print failed");
+            })
+            BOOKLETVALUES.forEach((bookletTest,segmentId)=>{
+                for (let k in bookletTest)
+                    if (booklet.stats[segmentId][k] != bookletTest[k])
+                        console.warn("Seed",seed,"bookletId",bookletId,"attribute",k,"should be",bookletTest[k],"but is",booklet.stats[segmentId][k]);
+                if (!segmentStats[segmentId])
+                    segmentStats[segmentId] = {};
+                if (
+                    (segmentStats[segmentId].spaceLeft === undefined) || (
+                        (booklet.stats[segmentId].toPage > segmentStats[segmentId].spaceLeft.toPage)
+                        ||
+                        (
+                            (booklet.stats[segmentId].toPage == segmentStats[segmentId].spaceLeft.toPage) &&
+                            (booklet.stats[segmentId].spaceLeft < segmentStats[segmentId].spaceLeft.value)
+                        )
+                    )
+                ) {
+                    segmentStats[segmentId].spaceLeft = {
+                        seed:seed,
+                        bookletId:bookletId,
+                        segment:segmentId,
+                        value:booklet.stats[segmentId].spaceLeft,
+                        spaceLeft:booklet.stats[segmentId].spaceLeft,
+                        toPage:booklet.stats[segmentId].toPage,
+                        svg:booklet.svg.getSVG()
+                    }
+                }
+                if (
+                    (booklet.stats[segmentId].minColSpacing !== undefined) &&
+                    (
+                        (segmentStats[segmentId].minColSpacing === undefined) ||
+                        (segmentStats[segmentId].minColSpacing.value > booklet.stats[segmentId].minColSpacing)
+                    )
+                ) {
+                    segmentStats[segmentId].minColSpacing = {
+                        value:booklet.stats[segmentId].minColSpacing,
+                        svg:booklet.svg.getSVG()
+                    }
+                }
+            })
+        });
+    
+        iteration++;
+        setTimeout(runTest,1000);
+    
+    } else {
+
+        console.log(statValues);
+        console.log(segmentStats);
+
+        let
+            allHtml = "";
+
+        segmentStats.forEach((segmentStat,id)=>{
+            allHtml +="<h1>Segment "+id+"</h1>";
+            allHtml +="<p>Space left: "+segmentStat.spaceLeft.value+"</p><div style='margin:10px 0'>"+segmentStat.spaceLeft.svg+"</div>";
+            if (segmentStat.minColSpacing)
+                allHtml +="<p>Min Column spacing: "+segmentStat.minColSpacing.value+"</p><div style='margin:10px 0'>"+segmentStat.minColSpacing.svg+"</div>";
+        })
+        document.body.innerHTML=allHtml;
+
+    }
+}
+
+function run() {
+
+    game = new Game("../../");
+
+    game.load(_=>{
+        runTest();
+    })
+
+}
+</script>

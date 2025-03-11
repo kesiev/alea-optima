@@ -1,0 +1,575 @@
+@keyframes spin {
+    from {
+		transform:translate(-100px) rotate(0deg);
+	}
+    to {
+		transform:translate(-100px) rotate(360deg);
+	}
+}
+
+@keyframes blink {
+    from {
+		text-shadow: 0 0px 0px #fff;
+	}
+    to {
+		text-shadow: 0 0px 20px #fff;
+	}
+}
+
+@keyframes fadebackground {
+    0% {
+		opacity:0;
+		scale:0.5;
+	}
+    20%,100% {
+		opacity:1;
+		scale:1;
+	}
+}
+
+@keyframes fadeforeground {
+    0%,40% {
+		opacity:0;
+		scale:1.5;
+	}
+    100% {
+		opacity:1;
+		scale:1;
+	}
+}
+
+@keyframes disappear {
+    100% {
+		opacity:0;
+	}
+}
+
+@keyframes setbackground {
+	0%,50% {
+		opacity: 1;
+		left:10vw;
+		right:10vw;
+		top:4vh;
+		height:70vh;
+	}
+    100% {
+		opacity:0.4;
+		left:2vw;
+		right:2vw;
+		top:2vh;
+		height:96vh;
+	}
+}
+
+BODY {
+	overflow: hidden;
+    font-size: 18px;
+    line-height: 20px;
+    padding: 0;
+    margin: 0;
+    color: #3b3b3b;
+    background-color: #fefefe;
+	font-family: Seshat;    
+	background-image: url('../images/paper.png');
+	background-repeat: repeat;
+	position: relative;
+	width:100%;
+	height:100%;
+}
+
+.logo {
+	transition: all 1s;
+	position: absolute;
+	left:10vw;
+	right:10vw;
+	top:4vh;
+	height:70vh;
+}
+
+#pencil {
+	transition: all 1s;
+	position: absolute;
+	width: 80vw;
+	height: 4vw;
+	background-image: url('../images/pencil.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	transform: rotate(-20deg);
+	bottom:5vh;
+	right:-6vw;
+}
+
+#pencil.hidden {
+	bottom:-200vh;
+	right:-200vw;
+}
+
+#eraser {
+	transition: all 1s;
+	position: absolute;
+	width: 28vw;
+	height: 16vw;
+	background-image: url('../images/eraser.svg');
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+	transform:rotate(-20deg);
+	top:-8vh;
+	left:-2vw;
+}
+
+#eraser.hidden {
+	top:-200vh;
+	left:-200vw;
+}
+
+.logopart {
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+	background-repeat: no-repeat;
+	background-position: center;
+	background-size: contain;
+}
+
+.logopart.background {
+	background-image: url('../images/background.svg');
+}
+
+.logopart.foreground {
+	background-image: url('../images/foreground.svg');
+}
+
+.logo.appear .background {
+	animation: fadebackground 4s 1 forwards;
+}
+
+.logo.appear .foreground {
+	animation: fadeforeground 4s 1 forwards;
+}
+
+.logo.disappear .foreground {
+	animation: disappear 1s 1 forwards;
+}
+
+.logo.disappear {
+	animation: setbackground 2s 1 forwards;
+}
+
+.logo.hidden {
+	display: none;
+}
+
+#talkbox {
+    transition: all 1s;
+    font-size: 40px;
+    position: absolute;
+    left:-50vw;
+    right:-50vw;
+    top:42vh;
+    height:100px;
+}
+
+#talkbox .bar {
+	transition: all 1s;
+    background-color: #3b3b3b;
+	z-index: 10;
+	position: absolute;
+	left:0;
+    right:0;
+	top:0;
+	bottom:0;
+}
+
+#talkbox .highlight {
+	font-weight: bold;
+	animation: blink 1s infinite alternate;
+}
+
+#talkbox.excited .bar {
+	background-color: #900000;
+}
+
+#talkbox .content {
+	z-index: 15;
+	position: absolute;
+    white-space: nowrap;
+    color:#fefefe;
+    transition: all 1s;
+    margin:auto;
+    text-align: center;
+}
+
+#talkbox.top {
+    top:50px;
+    transform: rotate(-2deg);
+}
+
+#talkbox.leave {
+    top:150vh;
+    transform: rotate(0deg);
+}
+
+#talkbox.confirm {
+    top:32vh;
+    transform: rotate(0.5deg);
+}
+
+#talkbox .spinner {
+	z-index: 1;
+	opacity:0;
+	transition: all 0.5s;
+	animation: spin 4s infinite linear;
+	position: absolute;
+	background-color: #3b3b3b;
+	width:200px;
+	height:200px;
+	left:100vw;
+	top:-50px;
+}
+
+#talkbox.progress .spinner {
+	opacity:1;
+}
+
+#notesbox {
+	z-index: 5;
+    overflow: hidden;
+    transition: all 1s;
+    font-size: 20px;
+    position: absolute;
+	top:100px;
+    width: 100%;
+    color:#3b3b3b;
+    text-align: center;
+    border-bottom:2px solid #3b3b3b;
+    height:40px;
+    transform: translate(0px,-45px);
+    overflow: hidden;
+    line-height: 300px;
+	background-color: #fefefe;
+}
+
+#notesbox.show {
+    line-height: 40px;
+    transform: translate(0px,0px);
+}
+
+.panel {
+    cursor: pointer;
+	overflow: hidden;
+	position: absolute;
+	width:50vw;
+	top:15vh;
+	bottom:20px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.panel .text, .board .text {
+    transition: all 1s;
+	position: absolute;
+	left:0;
+	right:0;
+	top:0;
+	bottom:0;
+}
+
+.panel .text .content, .board .text .content, #talkbox .text .content {
+	position: absolute;
+	top: 50%; left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	text-align: center;
+}
+
+#talkbox.top .content {
+    transform: translateX(-50%) translateY(-50%) rotate(2deg);
+}
+
+
+#talkbox.confirm .content {
+    transform: translateX(-50%) translateY(-50%) rotate(-0.5deg);
+}
+
+.panel .text .content {
+    width: 40vw;
+}
+
+.board .text .content {
+    width: 80vw;
+}
+
+.panel .text .title {
+	white-space: nowrap;
+	font-size: 40px;
+}
+
+.panel .text .description {
+	border-top: 2px solid #3b3b3b;
+	margin-top:10px;
+}
+
+.panel .text .title, .panel .text .description  {
+    transition: all 1s;
+    text-shadow: 0 0px 0px #3b3b3b;
+	padding-top:10px;
+}
+
+.panel.left {
+    transition: all 1s;
+    opacity: 0;
+	left:-50vw;
+}
+
+.panel.left.show {
+    left:0;
+    opacity: 1;
+}
+
+.panel.right {
+    transition: all 1s;
+    opacity: 0;
+	right:-50vw;
+}
+
+.right.right.show {
+    opacity: 1;
+    right:0;
+}
+
+.board {
+    transition: all 1s;
+	overflow: hidden;
+	position: absolute;
+    left:0;
+    right:0;
+	top:150vh;
+    height:0;
+}
+
+.board.show {
+	overflow: hidden;
+	position: absolute;
+	top:26vh;
+    height:60vh;
+}
+
+.board.bottom {
+	overflow: hidden;
+	position: absolute;
+	top:75vh;
+    height:20vh;
+}
+
+.separator {
+    padding:15px 0;
+}
+
+.board .label {
+	white-space: nowrap;
+    font-size: 40px;
+    line-height:60px;
+}
+
+.board .input INPUT {
+    font-size: 40px;
+    border: 2px solid #3b3b3b;
+    padding:5px;
+    border-radius: 100px;
+    font-family: Seshat;
+    padding:5px;
+    text-align: center;
+}
+
+.board .button {
+    transition: all 1s;
+    cursor: pointer;
+    position: relative;
+    background-color: #3b3b3b;
+    width:400px;
+    height:70px;
+    margin:30px auto;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.button .s3 {
+    transition: all 1s;
+    position: absolute;
+    font-size: 40px;
+    color:#fefefe;
+    white-space: nowrap;
+    line-height: 70px;
+    width:100%;
+    z-index: 10;
+    overflow: hidden;
+}
+
+.button .s1, .button .s2 {
+    position: absolute;
+    background-color: #3b3b3b;
+    width: 50px;
+    height: 50px;
+    transform: rotate(45deg);
+    top:10px;
+}
+
+.button .s1 {
+    left:-25px;
+}
+
+.button .s2 {
+    right:-25px;
+}
+
+.yesno.board.show {
+    top: 30vh;
+}
+
+#footer {
+	font-size: 14px;
+	text-align: center;
+	position: absolute;
+	z-index: 100;
+	left:0;
+	right:0;
+	bottom: 0;
+	line-height: 16px;
+	padding:10px;
+	text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+}
+
+#footer A {
+	transition: all 0.25s;
+	color:#3b3b3b;
+}
+
+@media (hover: hover) {
+
+	.panel:hover .text {
+		margin-bottom:10px;
+	}
+	
+	.panel:hover .text .title, .panel:hover .text .description {
+		text-shadow: 0 10px 10px rgba(59, 59, 59, 0.3);
+		color:#f00;
+		border-color: #f00;
+	}
+	
+	.button:hover {
+		box-shadow: 0 10px 10px rgba(59, 59, 59, 0.3);
+		transform: translate(0,-10px);
+	}
+	
+	.button:hover .s3 {
+		color:#f00;
+	}
+
+	#footer A:hover {
+		color:#f00;
+	}
+	
+}
+
+@media (max-width: 920px) {
+
+	#talkbox, .panel .text .title, .board .label,.board .input INPUT, .button .s3 {
+		font-size: 30px;
+	}
+
+	.board .label {
+		line-height:50px;
+	}
+	
+}
+
+@media (max-width: 700px) {
+
+	
+	#pencil {
+		transform: rotate(-20deg) scale(4);
+		bottom:-15vh;
+		right:100vw;
+	}
+
+	#eraser {
+		transform:rotate(-20deg) scale(4);
+		top:-12vh;
+		left:-2vw;
+	}
+
+	#talkbox, .panel .text .title, .board .label,.board .input INPUT, .button .s3 {
+		font-size: 18px;
+	}
+
+	#talkbox .content {
+		max-width: 90vw;
+		white-space: wrap;
+		line-height: 30px;
+	}
+
+	.board .label {
+		margin-top:20px;
+		line-height:38px;
+	}
+
+	#notesbox, #notesbox.show {
+		font-size: 14px;
+	}
+
+	.board .button {
+		width:200px;
+	}
+}
+
+@media (max-width: 520px) {
+
+	#notesbox, #notesbox.show {
+		font-size: 10px;
+	}
+}
+
+@media (max-height: 700px) {
+
+	.separator {
+		padding:5px 0;
+	}
+
+	.board .button {
+		margin:15px auto;
+	}
+
+	.board.show {
+		overflow: hidden;
+		position: absolute;
+		top:32vh;
+	}
+
+	.yesno.board.show {
+		top: 35vh;
+	}
+
+	.board.bottom {
+		top:60vh;
+	}
+	
+}
+
+@media (max-height: 600px) {
+
+	.board.show {
+		overflow: hidden;
+		position: absolute;
+		top:35vh;
+	}
+
+	.yesno.board.show {
+		top: 35vh;
+	}
+	
+}

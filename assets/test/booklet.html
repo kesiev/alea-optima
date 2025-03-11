@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script src="../../js/svg.js"></script>
+        <script src="../../js/jspdf.umd.min.js"></script>
+        <script src="../../js/svg2pdf.umd.min.js"></script>
+        <script src="../../js/fonts/Seshat-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesbold-normal.js"></script>
+        <script src="../../js/fonts/Utmtimesitalic-normal.js"></script>
+        <script src="../../js/fonts/LswDrachenklaueRegular-normal.js"></script>
+        <script src="../../js/metadata.js"></script>
+        <script src="../../js/bookletprinter.js"></script>
+        <link rel="stylesheet" type="text/css" href="../../style/Seshat/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/utmtimes/stylesheet.css">
+        <link rel="stylesheet" type="text/css" href="../../style/LswDrachenklaueRegular/stylesheet.css">
+    </head>
+</html>
+<body onload="onl()">
+    <div style="font-family:seshat">Font loaded</div>
+    <div style="font-family:times">Font loaded</div>
+	<div style="font-family:times;font-weight:bold">Font loaded</div>
+	<div style="font-family:times;font-style:italic">Font loaded</div>
+    <div style="font-family:Utmtimesbold">Font loaded</div>
+	<div style="font-family:Utmtimesitalic">Font loaded</div>
+    <div style="font-family:LswDrachenklaueRegular">Font loaded</div>
+</body>
+<script>
+    
+function onl() {
+
+    let
+        template = new SVGTemplate("../../svg/model.svg",'l');
+
+    template.load(_=>{
+        let
+            svg = new SVG(template),
+            bookletPrinter = new BookletPrinter(svg),
+            atPage = 0,
+            pages = [
+                "{nomultipage}{center}{symbol manualCover}{moveup 9}Text under manual booklet\n\n\n\n\n\n\n\n\nText under border",
+                
+                "This text has word wrap so it goes on a new line when it's too long.\n\n"+
+                "{nowordwrap}This text instead goes over the border due to no word wrapping!\n\n"+
+                "{wordwrap}This text has word wrap so it goes on a new line when it's too long.",
+
+                "{nowordwrap}{bold}Encounter{endbold} (2d6)\n"+
+                "{symbol ruler} {bold}1{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n"+
+                "{symbol ruler} {bold}2{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n"+
+                "{symbol ruler} {bold}3{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n"+
+                "{symbol ruler} {bold}4{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n"+
+                "{symbol ruler} {bold}5{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n"+
+                "{symbol ruler} {bold}6{endbold}\n"+
+                "{bold}1.{endbold} Lorem ipsum{endbold}{tab}{bold}4.{endbold} Lorem ipsum\n"+
+                "{bold}2.{endbold} Lorem ipsum{endbold}{tab}{bold}5.{endbold} Lorem ipsum\n"+
+                "{bold}3.{endbold} Lorem ipsum{endbold}{tab}{bold}6.{endbold} Lorem ipsum\n",
+                "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed nec venenatis neque, nec porta justo. Nulla eu congue nulla. Donec lobortis eleifend dolor in consectetur. Cras ut leo elit. In id nulla ipsum. Praesent tempus elit lacus, sed commodo magna egestas et. Nullam lobortis arcu malesuada sagittis interdum. In interdum consequat arcu non tincidunt. Sed laoreet metus at viverra rhoncus. Sed sit amet erat rutrum, ornare felis ac, placerat leo. Aliquam luctus, ex id sagittis suscipit, odio erat ullamcorper nulla, vitae viverra sapien mauris id diam. In consequat sagittis rhoncus. Nunc ac eros id ante aliquam imperdiet. Fusce convallis purus tellus, ut posuere massa sollicitudin in. Etiam dolor tellus, malesuada ut volutpat eu, sollicitudin sed ante. "+
+                "Sed venenatis et purus non aliquam. Pellentesque viverra, purus non tincidunt dignissim, nibh magna sollicitudin quam, nec dapibus enim lectus in turpis. Nunc odio felis, posuere sit amet enim vel, feugiat bibendum neque. Vestibulum ex velit, egestas vel dui quis, elementum sagittis lorem. Nulla ipsum sem, vestibulum at aliquet non, sodales eget lectus. Etiam aliquet massa sed turpis faucibus rutrum. Quisque rhoncus lectus vitae ante hendrerit tristique. Suspendisse ut convallis magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam efficitur ligula lorem, vitae tristique orci gravida in. Sed convallis tellus est, et eleifend nulla vehicula sed. Vestibulum massa odio, facilisis eu rutrum eu, interdum ac nisi. Nam placerat est vel ipsum feugiat finibus. Quisque metus velit, pulvinar ut ullamcorper a, vulputate eget velit. Curabitur vitae dapibus arcu. "+
+                "Aenean mollis, turpis eu lacinia malesuada, justo dui commodo nunc, et facilisis lectus quam vitae tortor. Etiam eu turpis hendrerit, efficitur nibh vel, sollicitudin neque. Fusce imperdiet ex erat, non lacinia ipsum consequat vitae. Lorem ipsum dolor sit amet, consectetur adipiscing elit. In hac habitasse platea dictumst. Vestibulum id ipsum neque. Vivamus non maximus purus. Phasellus massa urna, euismod sed hendrerit ullamcorper, viverra ut odio. Donec velit diam, consequat non imperdiet at, porta a risus. Nulla condimentum varius tortor, a rhoncus lacus vulputate vitae. Donec sagittis semper sapien at sodales. Sed ornare semper scelerisque. Sed euismod non dui nec fringilla. Maecenas consequat velit dignissim felis convallis, in sodales libero condimentum. "+
+                "Nullam id arcu orci. Proin vitae lectus ac leo elementum laoreet. In sem mi, pellentesque ut ipsum vitae, convallis porttitor erat. Nullam aliquam commodo ligula. Sed luctus facilisis accumsan. Vestibulum ac velit consequat, consectetur ligula eget, dictum tortor. Pellentesque maximus nisl nec nisl porttitor, a tristique sapien accumsan. Nullam eget mollis nibh. Cras quam quam, malesuada ac consequat at, scelerisque quis ipsum. Nunc est mi, cursus a aliquet ac, pulvinar a libero. Pellentesque vitae odio ac eros tincidunt malesuada. Morbi hendrerit ipsum dui, a malesuada quam condimentum eget. Suspendisse felis diam, convallis vel iaculis faucibus, porttitor vitae lorem."+
+                "Mauris consectetur est eget bibendum auctor. Nullam et ipsum est. Pellentesque lacinia ultricies arcu sit amet hendrerit. Ut ullamcorper dolor at interdum facilisis. Aenean cursus facilisis elit, vitae malesuada nibh lacinia id. Fusce a malesuada purus. Donec aliquet porta lectus sed aliquam. Cras lectus lectus, egestas non elementum ut, sodales sit amet lorem. Sed vestibulum bibendum interdum. Mauris condimentum mollis lorem, vitae lobortis velit ornare et.",
+                "{center}{symbol characterSheet}",
+                "This is readable \"{fantasy}This is unreadable{endfantasy}\" This is readable again\n\n"+
+                "{fantasy}Sed venenatis et purus non aliquam. Pellentesque viverra, purus non tincidunt dignissim, nibh magna sollicitudin quam, nec dapibus enim lectus in turpis. Nunc odio felis, posuere sit amet enim vel, feugiat bibendum neque. Vestibulum ex velit, egestas vel dui quis, elementum sagittis lorem. Nulla ipsum sem, vestibulum at aliquet non, sodales eget lectus. Etiam aliquet massa sed turpis faucibus rutrum. Quisque rhoncus lectus vitae ante hendrerit tristique. Suspendisse ut convallis magna. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Nullam efficitur ligula lorem, vitae tristique orci gravida in. Sed convallis tellus est, et eleifend nulla vehicula sed. Vestibulum massa odio, facilisis eu rutrum eu, interdum ac nisi. Nam placerat est vel ipsum feugiat finibus. Quisque metus velit, pulvinar ut ullamcorper a, vulputate eget velit. Curabitur vitae dapibus arcu.{endfantasy}"
+            ];
+
+        pages.forEach(section=>{
+            let
+                stats = bookletPrinter.print(atPage,section);
+            console.log(stats);
+            atPage = stats.toPage;
+        });
+
+        svg.finalize();
+
+        document.body.innerHTML = svg.getSVG();
+        
+        let
+            button = document.createElement("input");
+
+        button.setAttribute("type","button");
+        button.value="PDF";
+        button.onclick=()=>{
+            svg.downloadPDF("booklet.pdf");
+        }
+        document.body.appendChild(button);
+
+    })
+        
+}
+</script>

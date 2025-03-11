@@ -1,0 +1,6 @@
+.~*
+node_modules
+package-lock.json
+assets/data/debug.md
+assets/evaluator/cache.json
+assets/evaluator/results.md

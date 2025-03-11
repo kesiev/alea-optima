@@ -1,0 +1,7 @@
+@font-face {
+    font-family: 'LswDrachenklaueRegular';
+    src: url('lswdrachenklaueregular-olyv-webfont.woff2') format('woff2'),
+         url('lswdrachenklaueregular-olyv-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
