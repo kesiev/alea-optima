@@ -3,7 +3,24 @@ function runInterface() {
 	const
 		FOOTER = "<a href='"+METADATA.gameUrl+"'>"+METADATA.gameName+"</a> - "+METADATA.gameVersion+" - &copy; "+METADATA.gameYear+" by "+METADATA.gameAuthor+" - <a href='learn.html' target=_blank>What is this?</a> -  <a href='"+METADATA.gameDiscord+"' target=_blank>Discord</a> - Sources at <a href='https://"+METADATA.gameSources+"' target=_blank>"+METADATA.gameSources+"</a>";
         SAVEDDATAID = "ALEAOPTIMA",
-		LANGUAGE = "EN";
+		SAVEDSETTINGSID = "ALEAOPTIMASETTINGS",
+		LANGUAGE = "EN",
+		SETTINGS = [
+			{
+				type:"radio",
+				name:"printMode",
+				values:[
+					{
+						nodeId:"optionbooklet",
+						value:"booklet",
+						default:true
+					},{
+						nodeId:"optionpamphlet",
+						value:"pamphlet"
+					}
+				]
+			}
+		];
 
 	let
 		// --- UI
@@ -35,7 +52,10 @@ function runInterface() {
 		startBoard = document.getElementById("startboard"),
 		startButton = document.getElementById("startbutton"),
 		startBoardButton = document.getElementById("startboardbutton"),
+		settingsButton = document.getElementById("settingsbutton"),
+		settingsBoard = document.getElementById("settingsboard"),
 		footer = document.getElementById("footer"),
+		endSettings = document.getElementById("endsettings"),
 
 		destinations = {
 			leftPanel:"",
@@ -46,6 +66,7 @@ function runInterface() {
 			inputBoardNo:"",
 			start:""
 		},
+		settings = {},
         savedData,
 
 		// --- Generator
@@ -55,6 +76,7 @@ function runInterface() {
 	yesNoYes.innerHTML = "Yes";
 	yesNoNo.innerHTML = "No";
 	startBoardButton.innerHTML = "Start";
+	settingsButton.innerHTML = "Settings";
 	footer.innerHTML = FOOTER;
 
     if (localStorage[SAVEDDATAID]) {
@@ -64,6 +86,42 @@ function runInterface() {
             savedData = 0;
         }
     }
+
+	if (localStorage[SAVEDSETTINGSID]) {
+        try {
+            settings = JSON.parse(localStorage[SAVEDSETTINGSID]);
+        } catch (e) {
+            settings = {};
+        }
+    }
+
+	SETTINGS.forEach(option=>{
+		switch (option.type) {
+			case "radio":{
+				option.values.forEach(value=>{
+					if (value.default && (!settings[option.name]))
+						settings[option.name] = value.value;
+					if (value.nodeId) {
+						let
+							node = document.getElementById(value.nodeId);
+						value._node = node;
+						node.onclick=()=>{
+							settings[option.name] = value.value;
+							option.values.forEach(value=>{
+								if (value._node)
+									value._node.className=value._node.className.replace(" selected","");
+							});
+							node.className += " selected";
+							saveSettings();
+						}
+						if (settings[option.name] == value.value)
+							node.className += " selected";
+					}
+				})
+				break;
+			}
+		}
+	})
 
     if (!savedData)
         savedData = {};
@@ -77,6 +135,10 @@ function runInterface() {
     function saveData() {
         localStorage[SAVEDDATAID] = JSON.stringify(savedData);
     }
+
+	function saveSettings() {
+		localStorage[SAVEDSETTINGSID] = JSON.stringify(settings);
+	}
 
 	function onInteraction(interaction) {
 
@@ -92,6 +154,8 @@ function runInterface() {
 					rightPanel:"right panel ",
 					yesNoBoard:"yesno board ",
 					startBoard:"start board ",
+					settingsButton:"smallbutton settings ",
+					settingsBoard:"",
 					logo:"logo disappear",
 					pencil:"hidden",
 					eraser:"hidden"
@@ -116,9 +180,18 @@ function runInterface() {
 					modes.talkBox+="leave";
 					modes.logo="logo appear";
 					modes.startBoard+="bottom";
+					modes.settingsButton+="show";
 					destinations.start = "endlogo";
+					destinations.settings = "settings";
 					modes.pencil="";
 					modes.eraser="";
+					break;
+				}
+				case "settings":{
+					modes.talkBox+="leave";
+					modes.logo="logo appear settings";
+					modes.settingsBoard="show";
+					destinations.endSettings = "logo";
 					break;
 				}
 				case "endlogo":{
@@ -255,7 +328,7 @@ function runInterface() {
 					modes.pencil="";
 					modes.eraser="";
 
-					game.born();
+					game.born(settings);
 					setTimeout(()=>{
 						busy = false;
 						onInteraction("select");
@@ -463,7 +536,7 @@ function runInterface() {
 					modes.pencil="";
 					modes.eraser="";
 
-					game.travel(generatorData.regionCode,generatorData.directionCode);
+					game.travel(generatorData.regionCode,generatorData.directionCode,settings);
                     if (generatorData.newAscension) {
                         savedData.ascensions[generatorData.worldSeed] = generatorData.ascensionTime;
                         savedData.ascensionTimes++;
@@ -479,6 +552,8 @@ function runInterface() {
 					
 			}
 
+			settingsButton.className = modes.settingsButton;
+			settingsBoard.className = modes.settingsBoard;
 			talkBox.className = modes.talkBox;
 			notesBox.className = modes.notesBox;
 			inputBoard.className = modes.inputBoard;
@@ -524,6 +599,14 @@ function runInterface() {
 
 	inputBoardNoButton.onclick=()=>{
 		onInteraction(destinations.inputBoardNo);
+	}
+
+	settingsButton.onclick=()=>{
+		onInteraction(destinations.settings);
+	}
+
+	endSettings.onclick=()=>{
+		onInteraction(destinations.endSettings);
 	}
 
 	onInteraction("start");

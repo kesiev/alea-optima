@@ -181,9 +181,9 @@ function SVG(template) {
     }
 
     this.deleteById = (id,subnode) => {
-        let node = this.getById(id,subnode);
-        if (!node) node = node.querySelector("[inkscape\\:label=\"" + id + "\"]");
-        if (node) this.delete(node);
+        let deleteNode = this.getById(id,subnode);
+        if (!deleteNode) deleteNode = (subnode||node).querySelector("[inkscape\\:label=\"" + id + "\"]");
+        if (deleteNode) this.delete(deleteNode);
     }
 
     this.setAttributeNumber = (node, prop, value) => {

@@ -79,6 +79,9 @@
 <div id="out"></div>
 <script>
 
+const
+    PRINTMODE = "booklet";
+
 let
     out,
     seed,
@@ -354,7 +357,7 @@ function onl() {
                 seed+=SEEDLETTERS[Math.floor(Math.random()*SEEDLETTERS.length)];
         }
 
-        out = game.benchmark(true, true, "EN", 0, seed),
+        out = game.benchmark(true, true, "EN", 0, seed, { printMode:PRINTMODE });
           
         console.log(out.booklets);
 

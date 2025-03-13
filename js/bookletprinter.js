@@ -1,5 +1,5 @@
 
-function BookletPrinter(svg) {
+function BookletPrinter(svg, printMode) {
 
     const
         WORDSPACING=0.5,
@@ -18,41 +18,194 @@ function BookletPrinter(svg) {
                 verticalAlignment:"top",
                 horizontalAlignment:"left"
             },
-            pages:[
-                {
-                    x:76.750,
-                    y:105,
-                    angle:0
-                },{
-                    x:148.500,
-                    y:105,
-                    angle:0
-                },{
-                    x:220.250,
-                    y:105,
-                    angle:0
-                },{
-                    x:220.250,
-                    y:5,
-                    angle:180
-                },{
-                    x:148.500,
-                    y:5,
-                    angle:180
-                },{
-                    x:76.750,
-                    y:5,
-                    angle:180
-                },{
-                    x:5,
-                    y:5,
-                    angle:180
-                },{
-                    x:5,
-                    y:105,
-                    angle:0
+            models:{
+                bookletManual:{
+                    pages:[
+                        {
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:148.500,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:148.500,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:105,
+                            angle:0
+                        }
+                    ],
+                    remove:[ "page-borders", "page-pamphlet", "page-pamphlet-manual" ]
+                },
+                bookletRegion:{
+                    pages:[
+                        {
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:148.500,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:148.500,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:5,
+                            angle:180
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:105,
+                            angle:0
+                        }
+                    ],
+                    remove:[ "page-borders", "page-pamphlet", "page-pamphlet-manual" ]
+                },
+                pamphletManual:{
+                    pages:[
+                        {
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:5,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"column",
+                            contentId:"columnContent",
+                            x:76.750,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"column",
+                            contentId:"columnContent",
+                            x:148.500,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:220.250,
+                            y:105,
+                            angle:0
+                        }
+                    ],
+                    remove:[ "page-borders", "page-edges", "page-pamphlet" ]
+                },
+                pamphletRegion:{
+                    pages:[
+                        {
+                            id:"column",
+                            contentId:"columnContent",
+                            x:5,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"page",
+                            contentId:"pageContent",
+                            x:76.750,
+                            y:105,
+                            angle:0
+                        },{
+                            id:"column",
+                            contentId:"columnContent",
+                            x:148.500,
+                            y:5,
+                            angle:0
+                        },{
+                            id:"column",
+                            contentId:"columnContent",
+                            x:220.250,
+                            y:5,
+                            angle:0
+                        }
+                    ],
+                    remove:[ "page-borders", "page-edges", "page-pamphlet-manual" ]
                 }
-            ]
+            }
         };
 
     let
@@ -174,11 +327,12 @@ function BookletPrinter(svg) {
 
         let newPage=()=>{
             let
-                placeHolder;
-            if (pageModels.pages[currentPage]) {
-                page=cloneNodeBy(0,"page",0,pageModels.pages[currentPage].x,pageModels.pages[currentPage].y,pageModels.pages[currentPage].angle);
+                placeHolder,
+                nextPage = pageModels.models[printMode].pages[currentPage];
+            if (nextPage) {
+                page=cloneNodeBy(0,nextPage.id,0,nextPage.x,nextPage.y,nextPage.angle);
                 currentPage++;
-                placeHolder = getPlaceholder("pageContent",page);
+                placeHolder = getPlaceholder(nextPage.contentId,page);
                 width = placeHolder.width;
                 height = placeHolder.height;
                 pageX = x = placeHolder.x;
@@ -525,7 +679,13 @@ function BookletPrinter(svg) {
 
     this.print=(atPage,booklet)=>{
         return pagesPrint(PAGES,atPage,booklet);
-   }
+    }
+
+    this.finalize=()=>{
+        PAGES.models[printMode].remove.forEach(remove=>{
+            svg.deleteById(remove);
+        })
+    }
     
 
 }

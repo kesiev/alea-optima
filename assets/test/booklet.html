@@ -34,7 +34,7 @@ function onl() {
     template.load(_=>{
         let
             svg = new SVG(template),
-            bookletPrinter = new BookletPrinter(svg),
+            bookletPrinter = new BookletPrinter(svg, "bookletManual"),
             atPage = 0,
             pages = [
                 "{nomultipage}{center}{symbol manualCover}{moveup 9}Text under manual booklet\n\n\n\n\n\n\n\n\nText under border",

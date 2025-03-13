@@ -120,14 +120,14 @@ function Game(rootPath) {
             return cell.codes[code];
     }
 
-    function printBooklet(pages) {
+    function printBooklet(pages, printMode) {
         let
             out = {
                 stats:[],
                 svg:0
             };
             svg = new SVG(template),
-            bookletPrinter = new BookletPrinter(svg),
+            bookletPrinter = new BookletPrinter(svg, printMode),
             atPage = 0;
 
         pages.forEach(section=>{
@@ -136,6 +136,8 @@ function Game(rootPath) {
             out.stats.push(stats);
             atPage = stats.toPage;
         });
+
+        bookletPrinter.finalize();
 
         out.svg = svg;
 
@@ -197,7 +199,7 @@ function Game(rootPath) {
 
     }
 
-    this.born=()=>{
+    this.born=(settings)=>{
         let
             book = new PDFBook(),
             cells = worldMap.getCells(),
@@ -206,8 +208,8 @@ function Game(rootPath) {
 
         map.finalize();
 
-        book.addPage(printBooklet(manual).svg);
-        book.addPage(printBooklet(cell.bookletData).svg);
+        book.addPage(printBooklet(manual, settings.printMode+"Manual").svg);
+        book.addPage(printBooklet(cell.bookletData, settings.printMode+"Region").svg);
         book.addPage(map);
 
         book.downloadPDF(FILEPREFIX+"-born-"+generatedSeed+"-"+cell.name+".pdf");
@@ -224,7 +226,7 @@ function Game(rootPath) {
         return direction && direction.to;
     }
 
-    this.travel=(id,code)=>{
+    this.travel=(id,code,settings)=>{
         let
             book = new PDFBook(),
             direction = getRegionDirection(id,code),
@@ -234,18 +236,18 @@ function Game(rootPath) {
         map.finalize();
 
         if (direction.to == "ascend") {
-            book.addPage(printBooklet(worldMap.ascension.bookletData).svg);
+            book.addPage(printBooklet(worldMap.ascension.bookletData, settings.printMode+"Region").svg);
             book.addPage(map);
             book.downloadPDF(FILEPREFIX+"-travel-"+generatedSeed+"-ASCENSION.pdf");
         } else {
-            book.addPage(printBooklet(cell.bookletData).svg);
+            book.addPage(printBooklet(cell.bookletData, settings.printMode+"Region").svg);
             book.addPage(map);
             book.downloadPDF(FILEPREFIX+"-travel-"+generatedSeed+"-"+cell.name+".pdf");
         }
 
     }
 
-    this.benchmark=(debug,addManual,language,progress,seed)=>{
+    this.benchmark=(debug,addManual,language,progress,seed,settings)=>{
 
         let
             out = {
@@ -264,12 +266,12 @@ function Game(rootPath) {
                 out.stats.history++;
             else
                 out.stats.noHistory++;
-            row = printBooklet(cell.bookletData);
+            row = printBooklet(cell.bookletData, settings.printMode+"Region");
             row.data = cell.bookletData;
             out.booklets.push(row);
         });
 
-        row = printBooklet(worldMap.ascension.bookletData);
+        row = printBooklet(worldMap.ascension.bookletData, settings.printMode+"Region");
         row.data = worldMap.ascension.bookletData;
         out.booklets.push(row);
 
@@ -279,7 +281,7 @@ function Game(rootPath) {
 
             map.finalize();
             
-            row = printBooklet(manual);
+            row = printBooklet(manual, settings.printMode+"Manual");
             row.data = manual;
             row.isManual = true;
             out.booklets.push(row);
@@ -307,7 +309,7 @@ function Game(rootPath) {
             "{nomultipage}{center}{symbol characterSheet}",
             "{nomultipage}{center}{symbol characterSheet}",
             "{nomultipage}{center}{symbol characterSheet}"
-        ]).svg);
+        ], "bookletManual").svg);
 
         book.downloadPDF("character-sheets.pdf");
 

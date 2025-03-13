@@ -151,6 +151,10 @@ BODY {
 	animation: fadeforeground 4s 1 forwards;
 }
 
+.logo.appear.settings {
+	opacity: 0.04;
+}
+
 .logo.disappear .foreground {
 	animation: disappear 1s 1 forwards;
 }
@@ -161,6 +165,79 @@ BODY {
 
 .logo.hidden {
 	display: none;
+}
+
+#settingsboard {
+	transition: all 1s;
+	position: absolute;
+	left:30%;
+	right:30%;
+	top:150%;
+	border:1px solid #3b3b3b;
+	background-color: #fefefe;
+	padding:10px;
+	box-shadow: 0 10px 10px rgba(59, 59, 59, 0.3);
+}
+
+#settingsboard.show {
+	top:30px;
+}
+
+#settingsboard .sectiontitle {
+	font-weight: bold;
+	text-align: center;
+	font-size: 40px;
+	padding:30px 0;
+}
+
+#settingsboard .subsectiontitle {
+	background-color: #3b3b3b;
+	color: #fefefe;
+	border-radius: 10px 0;
+	padding:10px;
+	text-align: center;
+}
+
+#settingsboard .optiontick {
+	display: inline-block;
+	width: 20px;
+	height:20px;
+	border:2px solid #3b3b3b;
+	vertical-align: middle;
+	margin-right: 10px;
+	border-radius: 8px;
+}
+
+#settingsboard .subsectionoption.selected .optiontick {
+	background-color: #3b3b3b;
+}
+
+#settingsboard .optiondetail {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+#settingsboard .optiontitle {
+	font-weight: bold;
+}
+
+#settingsboard .subsectionoption {
+	cursor: pointer;
+	padding:10px;
+	border-bottom: 1px dashed #3b3b3b;
+}
+
+#endsettings {
+	transition: all 1s;
+	margin-top: 10px;
+	bottom:20px;
+	left:50px;
+	right:50px;
+	background-color: #3b3b3b;
+	color: #fff;
+	text-align: center;
+	padding:10px;
+	cursor: pointer;
 }
 
 #talkbox {
@@ -427,6 +504,24 @@ BODY {
     right:-25px;
 }
 
+.smallbutton.settings {
+	position: absolute;
+	right:-100%;
+	top:10px;
+	transition: all 1s;
+    cursor: pointer;
+    background-color: #3b3b3b;
+	padding:20px;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+	color:#fefefe;
+}
+
+.smallbutton.settings.show {
+	right:0;
+}
+
 .yesno.board.show {
     top: 30vh;
 }
@@ -465,6 +560,15 @@ BODY {
 		box-shadow: 0 10px 10px rgba(59, 59, 59, 0.3);
 		transform: translate(0,-10px);
 	}
+
+	.smallbutton:hover {
+		padding-right:30px;
+		color:#f00;
+	}
+
+	#endsettings:hover {
+		color:#f00;
+	}
 	
 	.button:hover .s3 {
 		color:#f00;
@@ -478,6 +582,11 @@ BODY {
 
 @media (max-width: 920px) {
 
+	#settingsboard {
+		left:10%;
+		right:10%;
+	}
+
 	#talkbox, .panel .text .title, .board .label,.board .input INPUT, .button .s3 {
 		font-size: 30px;
 	}
@@ -490,6 +599,10 @@ BODY {
 
 @media (max-width: 700px) {
 
+	#settingsboard {
+		left:5px;
+		right:5px;
+	}
 	
 	#pencil {
 		transform: rotate(-20deg) scale(4);

@@ -39,6 +39,7 @@
 const
     SEEDLETTERS="0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ",
     SEEDS = 200,
+    PRINTMODE = "booklet",
     BOOKLETVALUES = [
         { fromPage:0, toPage:2 },
         { fromPage:2, toPage:3 },
@@ -63,7 +64,7 @@ function runTest() {
         for (let i=0;i<10;i++)
             seed+=SEEDLETTERS[Math.floor(Math.random()*SEEDLETTERS.length)];
 
-        out = game.benchmark(false, false, "EN", 0, seed),
+        out = game.benchmark(false, false, "EN", 0, seed, { printMode:PRINTMODE }),
         line = "Testing seed "+iteration+" of "+SEEDS+": "+seed;
 
         console.log(line);
