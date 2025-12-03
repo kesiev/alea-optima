@@ -213,14 +213,19 @@ function BookletPrinter(svg, printMode) {
         ITALICSPACING = 0,
         FANTASYSPACING = 0,
         FANTASYYGAP = 0.5,
+        REGULARSPACING = 0,
         root = svg.node.getElementsByTagName("svg")[0];
         bboxWidth = root.getBBox().width;
 
     // Firefox gets different sizes
-
     if (bboxWidth>10000) {
+        let
+            userAgent = (navigator.userAgentData && navigator.userAgentData.platform ? navigator.userAgentData.platform : navigator.platform).toLowerCase();
         SIZERATIO = 0.01;
         ITALICSPACING = -1.4;
+        // Moreover, Firefox on MacOSX has slighly larger word spacing
+        if (userAgent.includes("mac"))
+            REGULARSPACING = -0.035;
     }
 
     function cloneNodeBy(into,id,newid,dx,dy,rotate,flipx,before) {
@@ -541,7 +546,7 @@ function BookletPrinter(svg, printMode) {
                         size=measureNode(fantasyTextNode);
                         dy = FANTASYYGAP;
                     } else {
-                        nextWordSpacing=settings.wordSpacing;
+                        nextWordSpacing=settings.wordSpacing+REGULARSPACING;
                         svg.setText(normalTextNode,word);
                         size=measureNode(normalTextNode);
                     }
